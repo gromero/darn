@@ -1,0 +1,111 @@
+# HG changeset patch
+# User gromero
+# Date 1512149174 18000
+#      Fri Dec 01 12:26:14 2017 -0500
+# Node ID 483aa262bc1990bc91e8af5ee8fbc4f8e749cb9d
+# Parent  f93055f440d8d654c2d4b3dff5eb39c092049847
+Add support for 'darn' in macroassmbler
+
+diff --git a/src/hotspot/cpu/ppc/assembler_ppc.hpp b/src/hotspot/cpu/ppc/assembler_ppc.hpp
+--- a/src/hotspot/cpu/ppc/assembler_ppc.hpp
++++ b/src/hotspot/cpu/ppc/assembler_ppc.hpp
+@@ -521,6 +521,9 @@
+     XXLXOR_OPCODE  = (60u << OPCODE_SHIFT |  154u << 3),
+     XXLEQV_OPCODE  = (60u << OPCODE_SHIFT |  186u << 3),
+ 
++    // Power 9. Deliver A Random Number.
++    DARN_OPCODE    = (31u << OPCODE_SHIFT |   755 << 1),
++
+     // Vector Permute and Formatting
+     VPKPX_OPCODE   = (4u  << OPCODE_SHIFT |  782u     ),
+     VPKSHSS_OPCODE = (4u  << OPCODE_SHIFT |  398u     ),
+@@ -2176,6 +2179,9 @@
+   inline void mtfprwa(  FloatRegister   d, Register a);
+   inline void mffprd(   Register        a, FloatRegister d);
+ 
++  // Power 9. Deliver A Random Number.
++  inline void darn( Register d);
++
+   // AES (introduced with Power 8)
+   inline void vcipher(     VectorRegister d, VectorRegister a, VectorRegister b);
+   inline void vcipherlast( VectorRegister d, VectorRegister a, VectorRegister b);
+diff --git a/src/hotspot/cpu/ppc/assembler_ppc.inline.hpp b/src/hotspot/cpu/ppc/assembler_ppc.inline.hpp
+--- a/src/hotspot/cpu/ppc/assembler_ppc.inline.hpp
++++ b/src/hotspot/cpu/ppc/assembler_ppc.inline.hpp
+@@ -958,6 +958,11 @@
+ inline void Assembler::tresume_()                               { emit_int32( TSR_OPCODE | /*L=1*/ 1u << (31-10) | rc(1)); }
+ inline void Assembler::tcheck(int f)                            { emit_int32( TCHECK_OPCODE | bf(f)); }
+ 
++// Power 9. Deliver A Random Number.
++
++inline void Assembler::darn(Register d) { emit_int32( DARN_OPCODE | rt(d) | 1u << 17); }
++
++
+ // ra0 version
+ inline void Assembler::lwzx( Register d, Register s2) { emit_int32( LWZX_OPCODE | rt(d) | rb(s2));}
+ inline void Assembler::lwz(  Register d, int si16   ) { emit_int32( LWZ_OPCODE  | rt(d) | d1(si16));}
+diff --git a/src/hotspot/cpu/ppc/vm_version_ppc.cpp b/src/hotspot/cpu/ppc/vm_version_ppc.cpp
+--- a/src/hotspot/cpu/ppc/vm_version_ppc.cpp
++++ b/src/hotspot/cpu/ppc/vm_version_ppc.cpp
+@@ -124,7 +124,7 @@
+   // Create and print feature-string.
+   char buf[(num_features+1) * 16]; // Max 16 chars per feature.
+   jio_snprintf(buf, sizeof(buf),
+-               "ppc64%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
++               "ppc64%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+                (has_fsqrt()   ? " fsqrt"   : ""),
+                (has_isel()    ? " isel"    : ""),
+                (has_lxarxeh() ? " lxarxeh" : ""),
+@@ -142,6 +142,7 @@
+                (has_vsx()     ? " vsx"     : ""),
+                (has_ldbrx()   ? " ldbrx"   : ""),
+                (has_stdbrx()  ? " stdbrx"  : ""),
++               (has_darn()    ? " darn"    : ""),
+                (has_vshasig() ? " sha"     : "")
+                // Make sure number of %s matches num_features!
+               );
+@@ -687,7 +688,8 @@
+   a->lxvd2x(VSR0, R3_ARG1);                    // code[14] -> vsx
+   a->ldbrx(R7, R3_ARG1, R4_ARG2);              // code[15] -> ldbrx
+   a->stdbrx(R7, R3_ARG1, R4_ARG2);             // code[16] -> stdbrx
+-  a->vshasigmaw(VR0, VR1, 1, 0xF);             // code[17] -> vshasig
++  a->darn(R7);                                 // code[17] -> darn
++  a->vshasigmaw(VR0, VR1, 1, 0xF);             // code[18] -> vshasig
+   a->blr();
+ 
+   // Emit function to set one cache line to zero. Emit function descriptor and get pointer to it.
+@@ -739,6 +741,7 @@
+   if (code[feature_cntr++]) features |= vsx_m;
+   if (code[feature_cntr++]) features |= ldbrx_m;
+   if (code[feature_cntr++]) features |= stdbrx_m;
++  if (code[feature_cntr++]) features |= darn_m;
+   if (code[feature_cntr++]) features |= vshasig_m;
+ 
+   // Print the detection code.
+diff --git a/src/hotspot/cpu/ppc/vm_version_ppc.hpp b/src/hotspot/cpu/ppc/vm_version_ppc.hpp
+--- a/src/hotspot/cpu/ppc/vm_version_ppc.hpp
++++ b/src/hotspot/cpu/ppc/vm_version_ppc.hpp
+@@ -50,6 +50,7 @@
+     ldbrx,
+     stdbrx,
+     vshasig,
++    darn,
+     num_features // last entry to count features
+   };
+   enum Feature_Flag_Set {
+@@ -72,6 +73,7 @@
+     vsx_m                 = (1 << vsx    ),
+     ldbrx_m               = (1 << ldbrx  ),
+     stdbrx_m              = (1 << stdbrx ),
++    darn_m                = (1 << darn   ),
+     all_features_m        = (unsigned long)-1
+   };
+ 
+@@ -108,6 +110,7 @@
+   static bool has_vsx()     { return (_features & vsx_m) != 0; }
+   static bool has_ldbrx()   { return (_features & ldbrx_m) != 0; }
+   static bool has_stdbrx()  { return (_features & stdbrx_m) != 0; }
++  static bool has_darn()    { return (_features & darn_m) != 0; }
+   static bool has_vshasig() { return (_features & vshasig_m) != 0; }
+   static bool has_mtfprd()  { return has_vpmsumb(); } // alias for P8
+ 

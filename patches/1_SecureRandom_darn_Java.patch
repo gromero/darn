@@ -1,0 +1,41 @@
+# HG changeset patch
+# User gromero
+# Date 1512159671 18000
+#      Fri Dec 01 15:21:11 2017 -0500
+# Node ID 65b664710f0a471bcde536afad63c6d6c397d58c
+# Parent  11550985442257c07a31ff5167725aa52363811f
+Add darn() method to SecureRandom
+
+diff --git a/src/java.base/share/classes/java/security/SecureRandom.java b/src/java.base/share/classes/java/security/SecureRandom.java
+--- a/src/java.base/share/classes/java/security/SecureRandom.java
++++ b/src/java.base/share/classes/java/security/SecureRandom.java
+@@ -34,6 +34,8 @@
+ import sun.security.jca.GetInstance.Instance;
+ import sun.security.util.Debug;
+ 
++import java.nio.*;
++
+ /**
+  * This class provides a cryptographically strong random number
+  * generator (RNG).
+@@ -853,6 +855,20 @@
+     }
+ 
+     /**
++     * Mockup 'darn' instruction.
++     *
++     * @param none.
++     * @return a bogus random number.
++     */
++    public byte[] darn() {
++      long fake_random_number = 0xdeadc0de;
++      ByteBuffer buffer = ByteBuffer.allocate(8);
++      buffer.putLong(fake_random_number);
++
++      return buffer.array();
++    }
++
++    /**
+      * Helper function to convert a long into a byte array (least significant
+      * byte first).
+      */
