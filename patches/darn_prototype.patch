@@ -1,0 +1,134 @@
+# HG changeset patch
+# User gromero
+# Date 1512425664 18000
+#      Mon Dec 04 17:14:24 2017 -0500
+# Node ID 36dc606967e641b2e80006618fa3e20671df3509
+# Parent  11550985442257c07a31ff5167725aa52363811f
+Add darn() method to SecureRandom and its intrinsic
+
+This change add a public method to SecureRandom class called darn() and
+intrinsifies it, getting the random numbe directly from P9 random number
+generator using 'darn' instruction.
+
+diff --git a/src/hotspot/cpu/ppc/templateInterpreterGenerator_ppc.cpp b/src/hotspot/cpu/ppc/templateInterpreterGenerator_ppc.cpp
+--- a/src/hotspot/cpu/ppc/templateInterpreterGenerator_ppc.cpp
++++ b/src/hotspot/cpu/ppc/templateInterpreterGenerator_ppc.cpp
+@@ -1833,6 +1833,16 @@
+   return start;
+ }
+ 
++address TemplateInterpreterGenerator::generate_securerandom_darn_entry() {
++  address _pc = __ pc();
++
++  __ darn(R3_RET);
++  __ blr();
++
++  return _pc;
++}
++
++
+ // CRC32 Intrinsics.
+ //
+ // Contract on scratch and work registers.
+diff --git a/src/hotspot/share/classfile/vmSymbols.hpp b/src/hotspot/share/classfile/vmSymbols.hpp
+--- a/src/hotspot/share/classfile/vmSymbols.hpp
++++ b/src/hotspot/share/classfile/vmSymbols.hpp
+@@ -776,6 +776,11 @@
+   do_intrinsic(_full_name, gromero, full_name_name, void_method_signature, F_S)   \
+   do_name(full_name_name, "full_name")                                            \
+                                                                                   \
++  /* darn */                                                                                  \
++  do_class(securerandom, "java/security/SecureRandom")                                        \
++  do_intrinsic(_darn, securerandom, darn_name, void_long_signature, F_R)                      \
++  do_name(darn_name, "darn")                                                                  \
++                                                                                              \
+   /* here are the math names, all together: */                                                                          \
+   do_name(abs_name,"abs")       do_name(sin_name,"sin")         do_name(cos_name,"cos")                                 \
+   do_name(tan_name,"tan")       do_name(atan2_name,"atan2")     do_name(sqrt_name,"sqrt")                               \
+diff --git a/src/hotspot/share/interpreter/abstractInterpreter.cpp b/src/hotspot/share/interpreter/abstractInterpreter.cpp
+--- a/src/hotspot/share/interpreter/abstractInterpreter.cpp
++++ b/src/hotspot/share/interpreter/abstractInterpreter.cpp
+@@ -138,6 +138,8 @@
+     case vmIntrinsics::_doubleToRawLongBits: return java_lang_Double_doubleToRawLongBits;
+     // gromero
+     case vmIntrinsics::_full_name: return gromero_full_name;
++    // darn
++    case vmIntrinsics::_darn:      return securerandom_darn;
+     default:                                 break;
+   }
+ #endif // CC_INTERP
+diff --git a/src/hotspot/share/interpreter/abstractInterpreter.hpp b/src/hotspot/share/interpreter/abstractInterpreter.hpp
+--- a/src/hotspot/share/interpreter/abstractInterpreter.hpp
++++ b/src/hotspot/share/interpreter/abstractInterpreter.hpp
+@@ -89,6 +89,7 @@
+     java_lang_Double_longBitsToDouble,                          // implementation of java.lang.Double.longBitsToDouble()
+     java_lang_Double_doubleToRawLongBits,                       // implementation of java.lang.Double.doubleToRawLongBits()
+     gromero_full_name,                                          // implementation of gromero.full_name() method ;-)
++    securerandom_darn,                                          // implementation of darn method...
+     number_of_method_entries,
+     invalid = -1
+   };
+diff --git a/src/hotspot/share/interpreter/templateInterpreterGenerator.cpp b/src/hotspot/share/interpreter/templateInterpreterGenerator.cpp
+--- a/src/hotspot/share/interpreter/templateInterpreterGenerator.cpp
++++ b/src/hotspot/share/interpreter/templateInterpreterGenerator.cpp
+@@ -227,6 +227,7 @@
+   method_entry(java_lang_Double_doubleToRawLongBits);
+ 
+   method_entry(gromero_full_name)
++  method_entry(securerandom_darn)
+ 
+ #undef method_entry
+ 
+@@ -412,6 +413,7 @@
+ 
+   switch (kind) {
+   case Interpreter::gromero_full_name      : entry_point = generate_full_name_entry();            break;
++  case Interpreter::securerandom_darn      : entry_point = generate_securerandom_darn_entry();    break;
+   case Interpreter::zerolocals             :                                          break;
+   case Interpreter::zerolocals_synchronized:                synchronized = true;      break;
+   case Interpreter::native                 : native = true;                           break;
+diff --git a/src/hotspot/share/interpreter/templateInterpreterGenerator.hpp b/src/hotspot/share/interpreter/templateInterpreterGenerator.hpp
+--- a/src/hotspot/share/interpreter/templateInterpreterGenerator.hpp
++++ b/src/hotspot/share/interpreter/templateInterpreterGenerator.hpp
+@@ -88,6 +88,8 @@
+ 
+   // gromero
+   address generate_full_name_entry(void);
++  // darn
++  address generate_securerandom_darn_entry(void);
+ 
+   address generate_normal_entry(bool synchronized);
+   address generate_native_entry(bool synchronized);
+diff --git a/src/java.base/share/classes/java/security/SecureRandom.java b/src/java.base/share/classes/java/security/SecureRandom.java
+--- a/src/java.base/share/classes/java/security/SecureRandom.java
++++ b/src/java.base/share/classes/java/security/SecureRandom.java
+@@ -34,6 +34,9 @@
+ import sun.security.jca.GetInstance.Instance;
+ import sun.security.util.Debug;
+ 
++import jdk.internal.HotSpotIntrinsicCandidate;
++import java.nio.*;
++
+ /**
+  * This class provides a cryptographically strong random number
+  * generator (RNG).
+@@ -853,6 +856,19 @@
+     }
+ 
+     /**
++     * Mockup 'darn' instruction.
++     *
++     * @param none.
++     * @return a bogus random number.
++     */
++    @HotSpotIntrinsicCandidate
++    public long darn() {
++      long fake_random_number = 0xdeadc0de;
++
++      return fake_random_number;
++    }
++
++    /**
+      * Helper function to convert a long into a byte array (least significant
+      * byte first).
+      */
