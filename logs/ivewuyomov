@@ -1,0 +1,134 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Djava.security.debug=ibmjcetrng ran6; done 
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:49 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:49 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.533348E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:50 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:50 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.557792E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:51 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:51 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.1576256E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:51 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:52 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.188808E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:52 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:52 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+6.9825752E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:53 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:53 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.2033496E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:54 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:54 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.0859832E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:55 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:55 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.4739128E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:56 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:56 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.5519584E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:56:57 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+Feb 21, 2018 1:56:57 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.427564E7 ns
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Dcom.ibm.jit.crypto.nohardwaretrng=true -Djava.security.debug=ibmjcetrng ran6; done 
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:10 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+6.8226064E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:11 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.4178016E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:12 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.0449072E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:13 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.2745232E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:14 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.35764E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:15 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.2938256E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:16 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.3955432E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:16 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+6.9120352E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:17 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.371604E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:57:19 PM com.ibm.crypto.provider.n generateSeed(byte[])
+FINER: num bytes = 20
+7.3047392E7 ns
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ cat ran6.java
+import java.security.*;
+
+class ran6 {
+  public static void main(String[] args) {
+
+    long nanoT1;
+    long nanoT2;
+    float delta;
+    int i;
+
+    byte[] b = new byte[20];
+
+    SecureRandom random = new SecureRandom();
+
+    try {
+      random = SecureRandom.getInstance("SHA1PRNG");
+     } catch (NoSuchAlgorithmException ex) {
+      System.out.println("Unabe to switch requested algorithm.");
+    }
+
+    nanoT1 = System.nanoTime();
+
+    b = random.generateSeed(20);
+
+    nanoT2 = System.nanoTime();
+
+    delta = nanoT2 - nanoT1;
+
+    System.out.println(delta + " ns");
+  }
+}

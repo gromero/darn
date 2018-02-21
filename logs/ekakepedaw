@@ -1,0 +1,11 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java ran4; done | tee output_delta.log
+3008409.0 ns
+3099275.0 ns
+3406709.0 ns
+3273616.0 ns
+3061134.0 ns
+2996695.0 ns
+3413330.0 ns
+3572833.0 ns
+2955587.0 ns
+3324557.0 ns

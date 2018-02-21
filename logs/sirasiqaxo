@@ -1,0 +1,43 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ ./javac ran2.java
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ ./java ran2
+213.83849 KiB/s
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ ./java -version
+java version "1.8.0_161"
+Java(TM) SE Runtime Environment (build 8.0.5.10 - pxl6480sr5fp10-20180214_01(SR5 FP10))
+IBM J9 VM (build 2.9, JRE 1.8.0 Linux ppc64le-64 Compressed References 20180208_378436 (JIT enabled, AOT enabled)
+OpenJ9   - 39bb844
+OMR      - c04ccb2
+IBM      - 2321a81)
+JCL - 20180209_01 based on Oracle jdk8u161-b12
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ lscpu | fgrep Model
+Model:               2.2 (pvr 004e 1202)
+Model name:          POWER9 (raw), altivec supported
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ cat ran2.java 
+import java.security.*;
+
+class ran2 {
+  public static void main(String[] args) {
+
+    long nanoT1;
+    long nanoT2;
+    float rate;
+    int i;
+
+    byte[] b = new byte[20];
+    SecureRandom random = new SecureRandom();
+
+    nanoT1 = System.nanoTime();
+    for (i = 1; i < 1024; i++) {
+  
+      random.nextBytes(b);
+
+    }   
+    nanoT2 = System.nanoTime();
+
+    rate = nanoT2 - nanoT1;
+    rate = rate / 1000000000;
+    rate = 20 / rate;
+
+    System.out.println(rate + " KiB/s");
+  }
+}

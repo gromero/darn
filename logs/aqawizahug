@@ -1,0 +1,97 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Djava.security.debug=ibmjcetrng ran5; done 
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:23 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:23 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.2082576E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:24 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:24 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.2018448E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:25 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:25 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.5286984E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:26 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:26 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.7515488E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:27 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:27 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.2169288E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:28 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:28 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.2130824E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:29 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:29 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.1445744E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:30 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:30 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.7155216E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:31 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:31 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.5837752E7 ns
+IBMJCE Build-Level: -20180124
+Feb 21, 2018 1:36:32 PM com.ibm.crypto.provider.n generateSeed(int)
+FINER: num bytes = 20
+Feb 21, 2018 1:36:32 PM com.ibm.crypto.provider.n getSeedBytes
+FINER: length = 20
+7.5279056E7 ns
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java ran5; done 
+1603811.0 ns
+1454734.0 ns
+4922227.0 ns
+1590706.0 ns
+1614103.0 ns
+1475448.0 ns
+1623225.0 ns
+1596676.0 ns
+1556255.0 ns
+1633192.0 ns
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ cat ran5.java
+import java.security.*;
+
+class ran5 {
+  public static void main(String[] args) {
+
+    long nanoT1;
+    long nanoT2;
+    float delta;
+    int i;
+
+    byte[] b = new byte[20];
+    SecureRandom random = new SecureRandom();
+
+    nanoT1 = System.nanoTime();
+
+    b = random.generateSeed(20);
+
+    nanoT2 = System.nanoTime();
+
+    delta = nanoT2 - nanoT1;
+
+    System.out.println(delta + " ns");
+  }
+}

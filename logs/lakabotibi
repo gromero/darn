@@ -1,0 +1,22 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Dcom.ibm.jit.crypto.nohardwaretrng=true ran5; done 
+3887141.0 ns
+4179425.0 ns
+1577647.0 ns
+1593111.0 ns
+1770367.0 ns
+1577854.0 ns
+1567628.0 ns
+1424795.0 ns
+1582760.0 ns
+1447839.0 ns
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java ran5; done 
+1786603.0 ns
+1466215.0 ns
+1625356.0 ns
+1461705.0 ns
+1640611.0 ns
+3880214.0 ns
+1537416.0 ns
+1771168.0 ns
+1501012.0 ns
+1457764.0 ns

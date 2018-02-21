@@ -1,0 +1,31 @@
+gromero@ltc-wspoon3:~$ java -version # openjdk from distro
+openjdk version "1.8.0_151"
+OpenJDK Runtime Environment (build 1.8.0_151-8u151-b12-0ubuntu0.17.10.2-b12)
+OpenJDK 64-Bit Server VM (build 25.151-b12, mixed mode)
+gromero@ltc-wspoon3:~$ java ran2
+444.98788 KiB/s
+gromero@ltc-wspoon3:~$ cd IBM/ibm-java-ppc64le-80/bin/
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ ./java -version # latest IBM Java
+java version "1.8.0_161"
+Java(TM) SE Runtime Environment (build 8.0.5.10 - pxl6480sr5fp10-20180214_01(SR5 FP10))
+IBM J9 VM (build 2.9, JRE 1.8.0 Linux ppc64le-64 Compressed References 20180208_378436 (JIT enabled, AOT enabled)
+OpenJ9   - 39bb844
+OMR      - c04ccb2
+IBM      - 2321a81)
+JCL - 20180209_01 based on Oracle jdk8u161-b12
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ ./java ran2
+251.40953 KiB/s
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ cd ~/openjdk-11-internal/bin/
+gromero@ltc-wspoon3:~/openjdk-11-internal/bin$ ./java -version # openjdk 11 from upstream
+openjdk version "11-internal" 2018-03-20
+OpenJDK Runtime Environment (build 11-internal+0-adhoc.gromero.hs)
+OpenJDK 64-Bit Server VM (build 11-internal+0-adhoc.gromero.hs, mixed mode)
+gromero@ltc-wspoon3:~/openjdk-11-internal/bin$ ./java ran2
+1098.7274 KiB/s
+gromero@ltc-wspoon3:~/openjdk-11-internal/bin$ cd ~/openjdk-10-internal/bin
+gromero@ltc-wspoon3:~/openjdk-10-internal/bin$ ./java -version # openjdk 10 with darn explotation code
+openjdk version "10-internal" 2018-03-20
+OpenJDK Runtime Environment (build 10-internal+0-adhoc.gromero.hs)
+OpenJDK 64-Bit Server VM (build 10-internal+0-adhoc.gromero.hs, mixed mode)
+gromero@ltc-wspoon3:~/openjdk-10-internal/bin$ ./java ran2
+4214.9746 KiB/s

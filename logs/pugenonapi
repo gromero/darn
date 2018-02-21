@@ -1,0 +1,51 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java ran8; done
+6629.4062 KiB/s
+6641.3394 KiB/s
+6802.6924 KiB/s
+6741.775 KiB/s
+6539.5073 KiB/s
+6264.667 KiB/s
+6785.075 KiB/s
+6881.9893 KiB/s
+6855.8003 KiB/s
+6698.4287 KiB/s
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Dcom.ibm.jit.crypto.nohardwaretrng=true ran8; done
+6975.4106 KiB/s
+6897.1646 KiB/s
+6728.2954 KiB/s
+6623.441 KiB/s
+6618.253 KiB/s
+6588.191 KiB/s
+6737.261 KiB/s
+6958.774 KiB/s
+6646.2817 KiB/s
+6685.514 KiB/s
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ cat ran8.java
+import java.security.*;
+
+class ran8 {
+  public static void main(String[] args) {
+
+    long nanoT1;
+    long nanoT2;
+    float rate;
+    int i;
+
+    byte[] b = new byte[1024*64];
+    SecureRandom random = new SecureRandom();
+
+    nanoT1 = System.nanoTime();
+    for (i = 1; i < 1024; i++) {
+  
+      random.nextBytes(b);
+
+    }   
+    nanoT2 = System.nanoTime();
+
+    rate = nanoT2 - nanoT1;
+    rate = rate / 1000000000;
+    rate = 1024*64 / rate;
+
+    System.out.println(rate + " KiB/s");
+  }
+}

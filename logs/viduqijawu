@@ -1,0 +1,21 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Dcom.ibm.jit.crypto.nohardwaretrng=true -Djava.security.debug=ibmjcetrng ran4; done 
+IBMJCE Build-Level: -20180124
+3322884.0 ns
+IBMJCE Build-Level: -20180124
+3407439.0 ns
+IBMJCE Build-Level: -20180124
+3390185.0 ns
+IBMJCE Build-Level: -20180124
+3092625.0 ns
+IBMJCE Build-Level: -20180124
+3367138.0 ns
+IBMJCE Build-Level: -20180124
+3030129.0 ns
+IBMJCE Build-Level: -20180124
+3323112.0 ns
+IBMJCE Build-Level: -20180124
+2986629.0 ns
+IBMJCE Build-Level: -20180124
+3367163.0 ns
+IBMJCE Build-Level: -20180124
+3151987.0 ns

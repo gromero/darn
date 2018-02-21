@@ -1,0 +1,21 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Djava.security.debug=ibmjcetrng ran4; done 
+IBMJCE Build-Level: -20180124
+3066262.0 ns
+IBMJCE Build-Level: -20180124
+3375983.0 ns
+IBMJCE Build-Level: -20180124
+3099799.0 ns
+IBMJCE Build-Level: -20180124
+5700167.0 ns
+IBMJCE Build-Level: -20180124
+3039689.0 ns
+IBMJCE Build-Level: -20180124
+3379766.0 ns
+IBMJCE Build-Level: -20180124
+3136816.0 ns
+IBMJCE Build-Level: -20180124
+3295263.0 ns
+IBMJCE Build-Level: -20180124
+3337603.0 ns
+IBMJCE Build-Level: -20180124
+3380624.0 ns

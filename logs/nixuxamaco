@@ -1,0 +1,54 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java -Dcom.ibm.jit.crypto.nohardwaretrng=true ran7; done 
+1462669.0 ns
+1588946.0 ns
+1570539.0 ns
+1512212.0 ns
+1594004.0 ns
+1620953.0 ns
+1467280.0 ns
+1480541.0 ns
+1441950.0 ns
+1697035.0 ns
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java ran7; done 
+1473065.0 ns
+1579629.0 ns
+1650255.0 ns
+1600886.0 ns
+1575874.0 ns
+1590307.0 ns
+1577530.0 ns
+1569456.0 ns
+1582934.0 ns
+1605140.0 ns
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ cat ran7.java
+import java.security.*;
+
+class ran7 {
+  public static void main(String[] args) {
+
+    long nanoT1;
+    long nanoT2;
+    float delta;
+    int i;
+
+    byte[] b = new byte[1];
+
+    SecureRandom random = new SecureRandom();
+
+    try {
+      random = SecureRandom.getInstance("SHA1PRNG");
+     } catch (NoSuchAlgorithmException ex) {
+      System.out.println("Unabe to switch requested algorithm.");
+    }
+
+    nanoT1 = System.nanoTime();
+
+    b = random.generateSeed(1);
+
+    nanoT2 = System.nanoTime();
+
+    delta = nanoT2 - nanoT1;
+
+    System.out.println(delta + " ns");
+  }
+}

@@ -1,0 +1,11 @@
+gromero@ltc-wspoon3:~/IBM/ibm-java-ppc64le-80/bin$ for i in `seq 1 10`; do ./java ran4; done 
+3367587.0 ns
+3059595.0 ns
+3176331.0 ns
+3038566.0 ns
+3359499.0 ns
+3456278.0 ns
+3360868.0 ns
+3387142.0 ns
+3373952.0 ns
+3304601.0 ns
