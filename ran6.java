@@ -8,7 +8,7 @@ class ran6 {
     float delta;
     int i;
 
-    byte[] b = new byte[20];
+    byte[] b = new byte[24];
 
     SecureRandom random = new SecureRandom();
 
@@ -20,7 +20,7 @@ class ran6 {
 
     nanoT1 = System.nanoTime();
 
-    b = random.generateSeed(20);
+    b = random.generateSeed(24);
 
     nanoT2 = System.nanoTime();
 
