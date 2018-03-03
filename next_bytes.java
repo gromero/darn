@@ -63,6 +63,6 @@ class next_bytes {
     throughput = throughput / 1_000_000; // Mbps
      
     System.out.println(deltaT_ns + " ns");
-    System.out.println(throughput + " Mbps");
+    System.out.printf("%f Mbps\n", throughput);
   }
 }
